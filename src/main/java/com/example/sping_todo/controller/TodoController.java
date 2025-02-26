@@ -28,11 +28,11 @@ public class TodoController {
     }
 
     @PostMapping("/{id}")
-    public Todo updateTodo(@RequestBody Todo todo) {
+    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
         return todoService.updateTodo(todo);
     }
 
-    @DeleteMapping( "/api/todos/{id}")
+    @DeleteMapping( "{id}")
     public void deleteTodo(@PathVariable("id") Long id) {
         todoService.deleteTodo(id);
     }
