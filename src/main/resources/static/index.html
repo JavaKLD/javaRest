@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+</head>
+<body>
+<h1>ToDo List</h1>
+<ul id="todo-list"></ul>
+<input type="text" id="todo-input" placeholder="Введите задачу">
+<button onclick="addTodo()">Добавить</button>
+
+<script>
+    async function loadTodos() {
+        let response = await fetch('http://localhost:8080/api/todos');
+        let todos = await response.json();
+        let list = document.getElementById('todo-list');
+        list.innerHTML = '';
+        todos.forEach(todo => {
+            let li = document.createElement('li');
+            li.textContent = todo.title;
+            list.appendChild(li);
+        });
+    }
+
+    async function addTodo() {
+        let input = document.getElementById('todo-input');
+        let title = input.value.trim();
+        if (title) {
+            await fetch('http://localhost:8080/api/todos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, completed: false })
+            });
+            input.value = '';
+            loadTodos();
+        }
+    }
+
+    loadTodos();
+</script>
+</body>
+</html>
